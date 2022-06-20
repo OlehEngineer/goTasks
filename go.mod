@@ -1,4 +1,4 @@
-module github.com/OlehEngineer/goTasks/task2
+module github.com/OlehEngineer/goTasks/tree/main/task2
 
 go 1.18
 
