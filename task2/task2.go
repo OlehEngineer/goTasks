@@ -4,9 +4,6 @@ import (
 	"sort"
 )
 
-func main() {
-
-}
 func MinMaxSumOfSlice(incomingSlice []int) (MinSum, MaxSum int) {
 	sort.Ints(incomingSlice)
 	MinSum, MaxSum = 0, 0
