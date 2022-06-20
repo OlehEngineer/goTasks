@@ -1,4 +1,4 @@
-package main
+package task2
 
 import (
 	"sort"
