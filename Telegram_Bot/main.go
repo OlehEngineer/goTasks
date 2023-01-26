@@ -73,6 +73,7 @@ func respond(botUrl string, update Update) error {
 	botMessage.ChatId = update.Message.Chat.ChatId
 	//send the same message to user which Bot gets
 	botMessage.Text = update.Message.Text
+	defaultAnswer := fmt.Sprintf("there is not such command: >%s<. Please input /help to get a list with available commands", update.Message.Text)
 	//check user input
 	switch botMessage.Text {
 	case "/about":
@@ -84,7 +85,7 @@ func respond(botUrl string, update Update) error {
 	case "/help":
 		botMessage.Text = "possible commands: /about; /links; /start"
 	default:
-		botMessage.Text = "there is not such command. Please input /help to get a list with available commands"
+		botMessage.Text = defaultAnswer
 	}
 	//convert respond messagge in bytes format
 	buf, err := json.Marshal(botMessage)
