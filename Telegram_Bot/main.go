@@ -4,19 +4,39 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
-	"log"
+
 	"net/http"
 	"os"
 	"strconv"
 
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
+	//create Log file for errors
+	LogFile, errLog := os.OpenFile("LOG.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	defer LogFile.Close()
+	//LOGRUS setting
+	multiOutput := io.MultiWriter(os.Stdout, LogFile)
+	log.SetOutput(multiOutput)
+	log.SetLevel(log.TraceLevel)
+	log.SetFormatter(&log.TextFormatter{
+		ForceColors:     true,
+		DisableColors:   false,
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
+
+	if errLog != nil {
+		log.Fatal("problem with errors log file")
+	}
+	//real .ENV file with access TOKEN and settings
 	envErr := godotenv.Load("local.env")
 	if envErr != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf(".ENV file is missing. Error > %s < occurs.", envErr)
 	}
 
 	botToken := os.Getenv("TOKEN") //please insert your API TOKEN here
@@ -27,19 +47,19 @@ func main() {
 	for {
 		updates, err := getUpdates(botURL, offset)
 		if err != nil {
-			log.Println("Something went wrong: ", err.Error())
+			log.Errorf("Something went wrong: ", err.Error())
 		}
 		//iteration throught each element of updates
 		//method sendMassage is using
 		for _, update := range updates {
 			err = respond(botURL, update)
 			if err != nil {
-				log.Println(err)
+				log.Error(err)
 			}
 			//new updates id. Increase for each new update
 			offset = update.UpdateId + 1
 		}
-		fmt.Println(updates)
+		log.Info(updates)
 	}
 }
 
@@ -71,8 +91,9 @@ func respond(botUrl string, update Update) error {
 	var botMessage BotMessage
 
 	botMessage.ChatId = update.Message.Chat.ChatId
-	//send the same message to user which Bot gets
+
 	botMessage.Text = update.Message.Text
+
 	defaultAnswer := fmt.Sprintf("there is not such command: >%s<. Please input /help to get a list with available commands", update.Message.Text)
 	//check user input
 	switch botMessage.Text {
