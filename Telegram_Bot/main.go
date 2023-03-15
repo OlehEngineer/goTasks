@@ -20,9 +20,9 @@ func main() {
 	LogFile, errLog := os.OpenFile("LOG.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 	defer LogFile.Close()
 	//LOGRUS setting
-	multiOutput := io.MultiWriter(os.Stdout, LogFile)
+	multiOutput := io.MultiWriter(os.Stdout, LogFile) //set logging into standard output and into a file
 	log.SetOutput(multiOutput)
-	log.SetLevel(log.TraceLevel)
+	log.SetLevel(log.TraceLevel) //Set log level
 	log.SetFormatter(&log.TextFormatter{
 		ForceColors:     true,
 		DisableColors:   false,
@@ -59,7 +59,11 @@ func main() {
 			//new updates id. Increase for each new update
 			offset = update.UpdateId + 1
 		}
-		log.Info(updates)
+		// write logging parameters
+		for _, upd := range updates {
+			log.Infof("Update ID - %v, Chat ID - %v, Massage - «%s»\n", upd.UpdateId, upd.Message.Chat.ChatId, upd.Message.Text)
+		}
+
 	}
 }
 
