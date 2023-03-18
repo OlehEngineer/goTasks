@@ -1,48 +1,37 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"io"
-	"io/ioutil"
-
-	"net/http"
-	"os"
-	"strconv"
-
+	"github.com/caarlos0/env/v7"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 )
 
-func main() {
-	//create Log file for errors
-	LogFile, errLog := os.OpenFile("LOG.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
-	defer LogFile.Close()
-	//LOGRUS setting
-	multiOutput := io.MultiWriter(os.Stdout, LogFile) //set logging into standard output and into a file
-	log.SetOutput(multiOutput)
-	log.SetLevel(log.TraceLevel) //Set log level
-	log.SetFormatter(&log.TextFormatter{
-		ForceColors:     true,
-		DisableColors:   false,
-		FullTimestamp:   true,
-		TimestampFormat: "2006-01-02 15:04:05",
-	})
+var CurrentConfiguration = Config{} // variable with current Bot configuration
 
-	if errLog != nil {
-		log.Fatal("problem with errors log file")
-	}
-	//real .ENV file with access TOKEN and settings
+func main() {
+	//real .ENV configuration file
 	envErr := godotenv.Load("local.env")
 	if envErr != nil {
 		log.Fatalf(".ENV file is missing. Error > %s < occurs.", envErr)
 	}
 
-	botToken := os.Getenv("TOKEN") //please insert your API TOKEN here
-	botApi := "https://api.telegram.org/bot"
-	botURL := botApi + botToken
-	offset := 0
+	// parsing .ENV file with "github.com/caarlos0/env/v7"
+	configErr := env.Parse(&CurrentConfiguration)
+	if configErr != nil {
+		log.Fatalf(".ENV file parsing error => %s.", &configErr)
+	}
+	//start logging
+	LogFile, logErr := StartLogging()
+	if logErr != nil {
+		log.Fatalf("problem with log file, error => %s", logErr)
+	}
+	defer LogFile.Close()
+
+	//get Bot Token and Bot API link from current configuration struct Config{}
+	botToken := CurrentConfiguration.Token
+	botURL := CurrentConfiguration.Botapi + botToken
+	offset := 0 // using as counter for UpdateID incresing through the looping
+
 	//↓ infinity cycle for updates checking ↓
 	for {
 		updates, err := getUpdates(botURL, offset)
@@ -50,7 +39,6 @@ func main() {
 			log.Errorf("Something went wrong: ", err.Error())
 		}
 		//iteration throught each element of updates
-		//method sendMassage is using
 		for _, update := range updates {
 			err = respond(botURL, update)
 			if err != nil {
@@ -59,68 +47,9 @@ func main() {
 			//new updates id. Increase for each new update
 			offset = update.UpdateId + 1
 		}
-		// write logging parameters
-		for _, upd := range updates {
-			log.Infof("Update ID - %v, Chat ID - %v, Massage - «%s»\n", upd.UpdateId, upd.Message.Chat.ChatId, upd.Message.Text)
+		//write logging parameters
+		for _, currentUpd := range updates {
+			log.Infof("Update ID - %v, Chat ID - %v, Massage - «%s»\n", currentUpd.UpdateId, currentUpd.Message.Chat.ChatId, currentUpd.Message.Text)
 		}
-
 	}
-}
-
-// ask Updates
-func getUpdates(botURL string, offset int) ([]Update, error) {
-	//reques to the Bot with method "getUpdates"
-	resp, err := http.Get(botURL + "/getUpdates" + "?offset=" + strconv.Itoa(offset))
-	if err != nil {
-		return nil, err
-	}
-	// close Bot respond body in the end of this function
-	defer resp.Body.Close()
-	//transtale bytes format to readble format
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-	//parsing of json Bot's reply
-	var restResponse RestResponse
-	err = json.Unmarshal(body, &restResponse)
-	if err != nil {
-		return nil, err
-	}
-	return restResponse.Result, nil
-}
-
-// respond to User
-func respond(botUrl string, update Update) error {
-	var botMessage BotMessage
-
-	botMessage.ChatId = update.Message.Chat.ChatId
-
-	botMessage.Text = update.Message.Text
-
-	defaultAnswer := fmt.Sprintf("there is not such command: >%s<. Please input /help to get a list with available commands", update.Message.Text)
-	//check user input
-	switch botMessage.Text {
-	case "/about":
-		botMessage.Text = os.Getenv("MYINFO") //"I ma 33 year old engineer who wants to became a programmer"
-	case "/links":
-		botMessage.Text = fmt.Sprintf("My Github account - %s\nMy personal email address is - %s", os.Getenv("MYGITHUB"), os.Getenv("MYMAIL"))
-	case "/start":
-		botMessage.Text = "possible commands: /about; /links; /start; /help"
-	case "/help":
-		botMessage.Text = "possible commands: /about; /links; /start"
-	default:
-		botMessage.Text = defaultAnswer
-	}
-	//convert respond messagge in bytes format
-	buf, err := json.Marshal(botMessage)
-	if err != nil {
-		return err
-	}
-	//send answer to user using method "sendMessage" in bytes format
-	_, err = http.Post(botUrl+"/sendMessage", "application/json", bytes.NewBuffer(buf))
-	if err != nil {
-		return err
-	}
-	return nil
 }
