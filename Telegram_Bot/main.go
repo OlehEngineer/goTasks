@@ -1,7 +1,10 @@
 package main
 
 import (
+	"telegramBot/holidays"
+
 	"github.com/caarlos0/env/v7"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 )
@@ -29,27 +32,57 @@ func main() {
 
 	//get Bot Token and Bot API link from current configuration struct Config{}
 	botToken := CurrentConfiguration.Token
-	botURL := CurrentConfiguration.Botapi + botToken
-	offset := 0 // using as counter for UpdateID incresing through the looping
 
-	//↓ infinity cycle for updates checking ↓
-	for {
-		updates, err := getUpdates(botURL, offset)
-		if err != nil {
-			log.Errorf("Something went wrong: ", err.Error())
+	bot, err := tgbotapi.NewBotAPI(botToken)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	bot.Debug = CurrentConfiguration.Botdebug //current Bot setting. Could be TRUE or FALSE
+
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+	updates := bot.GetUpdatesChan(u)
+
+	//check each update, any feedback from user
+	for update := range updates {
+		if update.Message == nil { // ignore any non-Message updates
+			continue
 		}
-		//iteration throught each element of updates
-		for _, update := range updates {
-			err = respond(botURL, update)
-			if err != nil {
-				log.Error(err)
+
+		if update.Message.IsCommand() {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+			// Extract the command from the Message.
+			switch update.Message.Command() {
+			case "help":
+				msg.Text = CurrentConfiguration.HELP
+			case "about":
+				msg.Text = CurrentConfiguration.ABOUT
+			case "holidays":
+				msg.ReplyMarkup = SendKeyboardToUser(CurrentConfiguration) // send to user keyboard with countries list
+			case "stop":
+				msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true) // remove keyboard with countries list
+			default:
+				msg.Text = CurrentConfiguration.DefaultText // default answer to unknown command by User. Defined in the .ENV file
 			}
-			//new updates id. Increase for each new update
-			offset = update.UpdateId + 1
-		}
-		//write logging parameters
-		for _, currentUpd := range updates {
-			log.Infof("Update ID - %v, Chat ID - %v, Massage - «%s»\n", currentUpd.UpdateId, currentUpd.Message.Chat.ChatId, currentUpd.Message.Text)
+			if _, err := bot.Send(msg); err != nil {
+				log.Panic(err)
+			}
+
+		} else {
+			// check text message from User
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+
+			switch update.Message.Text {
+			case "🇺🇦 UA", "🇵🇱 PL", "🇩🇪 DE", "🇫🇷 FR", "🇯🇵 JP", "🇬🇧 GB", "🇨🇦 CA", "🇺🇸 US":
+				msg.Text = holidays.MakeHolidayRequest(update.Message.Text, CurrentConfiguration.Apitoken)
+			default:
+				msg.Text = "not known country"
+			}
+			if _, err := bot.Send(msg); err != nil {
+				log.Panic(err)
+			}
+
 		}
 	}
 }

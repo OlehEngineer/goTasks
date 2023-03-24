@@ -1,0 +1,188 @@
+[31mPANI[0m[2023-03-18 18:16:53] Bad Request: message text is empty           
+[31mPANI[0m[2023-03-18 18:17:48] Bad Request: message text is empty           
+[36mINFO[0m[2023-03-18 20:07:37] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-18 20:11:13] Authorized on account MyVersionInfoBot       
+[31mPANI[0m[2023-03-18 20:11:16] Bad Request: message text is empty           
+[36mINFO[0m[2023-03-18 20:11:58] Authorized on account MyVersionInfoBot       
+[31mPANI[0m[2023-03-18 20:11:58] Bad Request: message text is empty           
+[36mINFO[0m[2023-03-18 20:12:03] Authorized on account MyVersionInfoBot       
+[31mPANI[0m[2023-03-18 20:12:18] Bad Request: message text is empty           
+[36mINFO[0m[2023-03-18 20:12:55] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-18 20:15:20] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-18 20:17:33] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-18 20:18:07] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-18 20:27:20] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-19 17:18:19] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-19 17:21:25] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-19 17:27:57] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-19 17:29:12] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-19 17:50:37] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-19 17:51:58] Authorized on account MyVersionInfoBot       
+[36mINFO[0m[2023-03-19 18:28:53] \U0001F1FA\U0001F1E6                         
+[36mINFO[0m[2023-03-19 18:47:02] \U0001F1FA\U0001F1E6                         
+[36mINFO[0m[2023-03-19 18:47:02] \U0001F1FA\U0001F1E6                         
+[36mINFO[0m[2023-03-20 20:34:37] 🇺🇦 UA                                        
+[36mINFO[0m[2023-03-20 20:34:39] 🇵🇱 PL                                        
+[36mINFO[0m[2023-03-20 20:34:42] 🇩🇪 DE                                        
+[36mINFO[0m[2023-03-20 20:34:50] 🇫🇷 FR                                        
+[36mINFO[0m[2023-03-20 20:34:53] 🇯🇵 JP                                        
+[36mINFO[0m[2023-03-20 20:37:02] User input is 🇺🇦 UA and the length is 11     
+[36mINFO[0m[2023-03-20 20:37:09] User input is 🇵🇱 PL and the length is 11     
+[36mINFO[0m[2023-03-20 20:37:12] User input is 🇩🇪 DE and the length is 11     
+[36mINFO[0m[2023-03-20 20:37:14] User input is 🇫🇷 FR and the length is 11     
+[36mINFO[0m[2023-03-20 20:37:15] User input is 🇬🇧 GB and the length is 11     
+[36mINFO[0m[2023-03-20 20:51:59]  UA                                          
+[36mINFO[0m[2023-03-20 20:52:09]  PL                                          
+[36mINFO[0m[2023-03-20 20:52:10]  DE                                          
+[36mINFO[0m[2023-03-20 20:52:11]  FR                                          
+[36mINFO[0m[2023-03-20 20:52:12]  JP                                          
+[36mINFO[0m[2023-03-20 20:55:04]  PL                                          
+[36mINFO[0m[2023-03-20 20:55:05]  DE                                          
+[36mINFO[0m[2023-03-20 21:02:11]  UA                                          
+[31mFATA[0m[2023-03-20 21:02:22] Holiday request error => Get "https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&=country= UA&year=2023&month3&day=20": dial tcp: lookup holidays.abstractapi.com: no such host 
+[36mINFO[0m[2023-03-20 21:05:21]  UA                                          
+[36mINFO[0m[2023-03-20 21:07:02]  PL                                          
+[36mINFO[0m[2023-03-20 21:09:55]  UA                                          
+[36mINFO[0m[2023-03-20 21:10:22]  UA                                          
+[36mINFO[0m[2023-03-20 21:10:23]  PL                                          
+[36mINFO[0m[2023-03-20 21:10:51]  UA                                          
+[36mINFO[0m[2023-03-20 21:12:06] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=20 
+[31mFATA[0m[2023-03-20 21:12:18] Holiday request error => Get "https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=20": dial tcp: lookup holidays.abstractapi.com: no such host 
+[36mINFO[0m[2023-03-20 21:16:11] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=20 
+[36mINFO[0m[2023-03-20 21:16:11] [{"name":"March Equinox","name_local":"","language":"","description":"","country":"UA","location":"Ukraine","type":"Seasonal","date":"03/20/2023","date_year":"2023","date_month":"03","date_day":"20","week_day":"Monday"}] 
+[36mINFO[0m[2023-03-20 21:16:19] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=PL&year=2023&month=3&day=20 
+[36mINFO[0m[2023-03-20 21:16:19] [{"name":"March Equinox","name_local":"","language":"","description":"","country":"PL","location":"Poland","type":"Seasonal","date":"03/20/2023","date_year":"2023","date_month":"03","date_day":"20","week_day":"Monday"}] 
+[36mINFO[0m[2023-03-20 21:16:31] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=DE&year=2023&month=3&day=20 
+[36mINFO[0m[2023-03-20 21:16:31] [{"name":"March Equinox","name_local":"","language":"","description":"","country":"DE","location":"Germany","type":"Seasonal","date":"03/20/2023","date_year":"2023","date_month":"03","date_day":"20","week_day":"Monday"}] 
+[36mINFO[0m[2023-03-20 21:16:39] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=FR&year=2023&month=3&day=20 
+[36mINFO[0m[2023-03-20 21:16:39] [{"name":"March Equinox","name_local":"","language":"","description":"","country":"FR","location":"France","type":"Seasonal","date":"03/20/2023","date_year":"2023","date_month":"03","date_day":"20","week_day":"Monday"}] 
+[36mINFO[0m[2023-03-20 21:16:43] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=US&year=2023&month=3&day=20 
+[36mINFO[0m[2023-03-20 21:16:44] [{"name":"March Equinox","name_local":"","language":"","description":"","country":"US","location":"United States","type":"Seasonal","date":"03/20/2023","date_year":"2023","date_month":"03","date_day":"20","week_day":"Monday"},{"name":"International Day of Happiness","name_local":"","language":"","description":"","country":"US","location":"United States","type":"UN observance","date":"03/20/2023","date_year":"2023","date_month":"03","date_day":"20","week_day":"Monday"}] 
+[36mINFO[0m[2023-03-21 20:57:59] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[31mERRO[0m[2023-03-21 20:58:07] Parsing error json: cannot unmarshal array into Go value of type holidays.APIResponse 
+[36mINFO[0m[2023-03-21 20:58:07] Parsing error json: cannot unmarshal array into Go value of type holidays.APIResponse 
+[36mINFO[0m[2023-03-21 20:58:07] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 20:58:07] In  today is  day                            
+[36mINFO[0m[2023-03-21 20:58:11] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=PL&year=2023&month=3&day=21 
+[31mERRO[0m[2023-03-21 20:58:11] Parsing error json: cannot unmarshal array into Go value of type holidays.APIResponse 
+[36mINFO[0m[2023-03-21 20:58:11] Parsing error json: cannot unmarshal array into Go value of type holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:16:32] Today next holidays: []                      
+[36mINFO[0m[2023-03-21 21:22:01] Today next holidays: []                      
+[31mERRO[0m[2023-03-21 21:22:01] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:22:08] Today next holidays: []                      
+[31mERRO[0m[2023-03-21 21:22:08] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:23:58] Today next holidays: []                      
+[31mERRO[0m[2023-03-21 21:23:58] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:29:09]                                              
+[31mERRO[0m[2023-03-21 21:29:09] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:31:52] There is no holidays today                   
+[31mERRO[0m[2023-03-21 21:31:52] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:32:00] There is no holidays today                   
+[31mERRO[0m[2023-03-21 21:32:00] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:32:35] []                                           
+[36mINFO[0m[2023-03-21 21:32:35] There is no holidays today                   
+[31mERRO[0m[2023-03-21 21:32:35] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:33:51] There is no holidays today                   
+[36mINFO[0m[2023-03-21 21:33:51] There is no holidays today                   
+[31mERRO[0m[2023-03-21 21:33:51] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:35:38] &[]                                          
+[36mINFO[0m[2023-03-21 21:35:38] There is no holidays today                   
+[31mERRO[0m[2023-03-21 21:35:38] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:36:07] There is no holidays today                   
+[36mINFO[0m[2023-03-21 21:36:07] &[]                                          
+[31mERRO[0m[2023-03-21 21:36:07] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:36:28] There is no holidays today                   
+[36mINFO[0m[2023-03-21 21:36:28] &[]                                          
+[31mERRO[0m[2023-03-21 21:36:28] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:37:13] [91 93]                                      
+[36mINFO[0m[2023-03-21 21:37:13] There is no holidays today                   
+[36mINFO[0m[2023-03-21 21:37:14] [123 34 101 114 114 111 114 34 58 123 34 109 101 115 115 97 103 101 34 58 34 89 111 117 32 104 97 118 101 32 101 120 99 101 101 100 101 100 32 116 104 101 32 114 101 113 117 101 115 116 115 32 112 101 114 32 115 101 99 111 110 100 32 97 108 108 111 119 101 100 32 98 121 32 121 111 117 114 32 99 117 114 114 101 110 116 32 112 108 97 110 46 32 86 105 115 105 116 32 116 104 101 32 65 98 115 116 114 97 99 116 32 100 97 115 104 98 111 97 114 100 32 116 111 32 117 112 103 114 97 100 101 32 102 111 114 32 97 32 104 105 103 104 101 114 32 108 105 109 105 116 46 34 44 34 99 111 100 101 34 58 34 116 111 111 95 109 97 110 121 95 114 101 113 117 101 115 116 115 34 44 34 100 101 116 97 105 108 115 34 58 110 117 108 108 125 125] 
+[31mERRO[0m[2023-03-21 21:37:14] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:41:09] [91 93]                                      
+[31mERRO[0m[2023-03-21 21:41:09] Parsing error json: Unmarshal(non-pointer []holidays.APIResponse) 
+[36mINFO[0m[2023-03-21 21:41:09] Parsing error json: Unmarshal(non-pointer []holidays.APIResponse) 
+[36mINFO[0m[2023-03-21 21:41:09] [123 34 101 114 114 111 114 34 58 123 34 109 101 115 115 97 103 101 34 58 34 89 111 117 32 104 97 118 101 32 101 120 99 101 101 100 101 100 32 116 104 101 32 114 101 113 117 101 115 116 115 32 112 101 114 32 115 101 99 111 110 100 32 97 108 108 111 119 101 100 32 98 121 32 121 111 117 114 32 99 117 114 114 101 110 116 32 112 108 97 110 46 32 86 105 115 105 116 32 116 104 101 32 65 98 115 116 114 97 99 116 32 100 97 115 104 98 111 97 114 100 32 116 111 32 117 112 103 114 97 100 101 32 102 111 114 32 97 32 104 105 103 104 101 114 32 108 105 109 105 116 46 34 44 34 99 111 100 101 34 58 34 116 111 111 95 109 97 110 121 95 114 101 113 117 101 115 116 115 34 44 34 100 101 116 97 105 108 115 34 58 110 117 108 108 125 125] 
+[31mERRO[0m[2023-03-21 21:41:09] Parsing error json: Unmarshal(non-pointer []holidays.APIResponse) 
+[36mINFO[0m[2023-03-21 21:41:39] []                                           
+[31mERRO[0m[2023-03-21 21:41:39] Parsing error json: Unmarshal(non-pointer []holidays.APIResponse) 
+[36mINFO[0m[2023-03-21 21:41:39] Parsing error json: Unmarshal(non-pointer []holidays.APIResponse) 
+[36mINFO[0m[2023-03-21 21:41:39] {"error":{"message":"You have exceeded the requests per second allowed by your current plan. Visit the Abstract dashboard to upgrade for a higher limit.","code":"too_many_requests","details":null}} 
+[31mERRO[0m[2023-03-21 21:41:39] Parsing error json: Unmarshal(non-pointer []holidays.APIResponse) 
+[36mINFO[0m[2023-03-21 21:44:34] []                                           
+[36mINFO[0m[2023-03-21 21:44:34] There is no holidays today                   
+[36mINFO[0m[2023-03-21 21:44:34] {"error":{"message":"You have exceeded the requests per second allowed by your current plan. Visit the Abstract dashboard to upgrade for a higher limit.","code":"too_many_requests","details":null}} 
+[31mERRO[0m[2023-03-21 21:44:34] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:48:48] []                                           
+[36mINFO[0m[2023-03-21 21:48:48] There is no holidays today                   
+[36mINFO[0m[2023-03-21 21:48:49] {"error":{"message":"You have exceeded the requests per second allowed by your current plan. Visit the Abstract dashboard to upgrade for a higher limit.","code":"too_many_requests","details":null}} 
+[31mERRO[0m[2023-03-21 21:48:49] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 21:51:45] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 21:51:46] []                                           
+[36mINFO[0m[2023-03-21 21:51:46] There is no holidays today                   
+[36mINFO[0m[2023-03-21 21:51:46] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 21:51:46] {"error":{"message":"You have exceeded the requests per second allowed by your current plan. Visit the Abstract dashboard to upgrade for a higher limit.","code":"too_many_requests","details":null}} 
+[31mERRO[0m[2023-03-21 21:51:46] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 22:03:54] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:03:55] []                                           
+[36mINFO[0m[2023-03-21 22:03:55] There is no holidays today                   
+[36mINFO[0m[2023-03-21 22:03:55] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:03:55] {"error":{"message":"You have exceeded the requests per second allowed by your current plan. Visit the Abstract dashboard to upgrade for a higher limit.","code":"too_many_requests","details":null}} 
+[31mERRO[0m[2023-03-21 22:03:55] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-21 22:05:20] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[31mFATA[0m[2023-03-21 22:05:21] open answer.json: The system cannot find the file specified. 
+[36mINFO[0m[2023-03-21 22:05:59] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=PL&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:06:00] [{
+[36mINFO[0m[2023-03-21 22:06:00] Today next holidays: [  ]                    
+[36mINFO[0m[2023-03-21 22:06:00] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=PL&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:06:00] [{
+[36mINFO[0m[2023-03-21 22:07:12] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:07:13] [{
+[36mINFO[0m[2023-03-21 22:07:13] [  ]                                         
+[36mINFO[0m[2023-03-21 22:07:13] Today next holidays: [  ]                    
+[36mINFO[0m[2023-03-21 22:07:13] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:07:13] [{
+[36mINFO[0m[2023-03-21 22:07:13] [  ]                                         
+[36mINFO[0m[2023-03-21 22:08:57] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:08:58] [{
+[36mINFO[0m[2023-03-21 22:08:58] [  ]                                         
+[36mINFO[0m[2023-03-21 22:08:58] Today next holidays: [  ]                    
+[36mINFO[0m[2023-03-21 22:08:58] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=21 
+[36mINFO[0m[2023-03-21 22:08:58] [{
+[36mINFO[0m[2023-03-21 22:08:58] [  ]                                         
+[36mINFO[0m[2023-03-22 19:44:30] [{
+[36mINFO[0m[2023-03-22 19:44:30] [New Year's Day Chinese New Year's Day Second day of the Chinese New Year] 
+[36mINFO[0m[2023-03-22 19:44:30] Today next holidays: [New Year's Day Chinese New Year's Day Second day of the Chinese New Year] 
+[36mINFO[0m[2023-03-22 19:44:30] [{
+[36mINFO[0m[2023-03-22 19:44:30] [New Year's Day Chinese New Year's Day Second day of the Chinese New Year] 
+[36mINFO[0m[2023-03-22 19:46:30] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=22 
+[36mINFO[0m[2023-03-22 19:46:30] There is no holidays today                   
+[36mINFO[0m[2023-03-22 19:46:30] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=UA&year=2023&month=3&day=22 
+[31mERRO[0m[2023-03-22 19:46:30] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-22 19:46:54] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=PL&year=2023&month=3&day=22 
+[36mINFO[0m[2023-03-22 19:46:55] There is no holidays today                   
+[36mINFO[0m[2023-03-22 19:46:55] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=PL&year=2023&month=3&day=22 
+[31mERRO[0m[2023-03-22 19:46:55] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-22 19:49:54] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=US&year=2023&month=3&day=22 
+[36mINFO[0m[2023-03-22 19:49:54] Today next holiday: [World Water Day]        
+[36mINFO[0m[2023-03-22 19:49:54] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=US&year=2023&month=3&day=22 
+[31mERRO[0m[2023-03-22 19:49:54] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-22 19:52:03] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=US&year=2023&month=3&day=22 
+[36mINFO[0m[2023-03-22 19:52:04] [91 123 34 110 97 109 101 34 58 34 87 111 114 108 100 32 87 97 116 101 114 32 68 97 121 34 44 34 110 97 109 101 95 108 111 99 97 108 34 58 34 34 44 34 108 97 110 103 117 97 103 101 34 58 34 34 44 34 100 101 115 99 114 105 112 116 105 111 110 34 58 34 34 44 34 99 111 117 110 116 114 121 34 58 34 85 83 34 44 34 108 111 99 97 116 105 111 110 34 58 34 85 110 105 116 101 100 32 83 116 97 116 101 115 34 44 34 116 121 112 101 34 58 34 85 78 32 111 98 115 101 114 118 97 110 99 101 34 44 34 100 97 116 101 34 58 34 48 51 47 50 50 47 50 48 50 51 34 44 34 100 97 116 101 95 121 101 97 114 34 58 34 50 48 50 51 34 44 34 100 97 116 101 95 109 111 110 116 104 34 58 34 48 51 34 44 34 100 97 116 101 95 100 97 121 34 58 34 50 50 34 44 34 119 101 101 107 95 100 97 121 34 58 34 87 101 100 110 101 115 100 97 121 34 125 93] 
+[36mINFO[0m[2023-03-22 19:52:04] Today next holiday: [World Water Day]        
+[36mINFO[0m[2023-03-22 19:52:04] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=US&year=2023&month=3&day=22 
+[36mINFO[0m[2023-03-22 19:52:04] [123 34 101 114 114 111 114 34 58 123 34 109 101 115 115 97 103 101 34 58 34 89 111 117 32 104 97 118 101 32 101 120 99 101 101 100 101 100 32 116 104 101 32 114 101 113 117 101 115 116 115 32 112 101 114 32 115 101 99 111 110 100 32 97 108 108 111 119 101 100 32 98 121 32 121 111 117 114 32 99 117 114 114 101 110 116 32 112 108 97 110 46 32 86 105 115 105 116 32 116 104 101 32 65 98 115 116 114 97 99 116 32 100 97 115 104 98 111 97 114 100 32 116 111 32 117 112 103 114 97 100 101 32 102 111 114 32 97 32 104 105 103 104 101 114 32 108 105 109 105 116 46 34 44 34 99 111 100 101 34 58 34 116 111 111 95 109 97 110 121 95 114 101 113 117 101 115 116 115 34 44 34 100 101 116 97 105 108 115 34 58 110 117 108 108 125 125] 
+[31mERRO[0m[2023-03-22 19:52:04] Parsing error json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-22 19:54:10] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=US&year=2023&month=3&day=22 
+[36mINFO[0m[2023-03-22 19:54:11] [91 123 34 110 97 109 101 34 58 34 87 111 114 108 100 32 87 97 116 101 114 32 68 97 121 34 44 34 110 97 109 101 95 108 111 99 97 108 34 58 34 34 44 34 108 97 110 103 117 97 103 101 34 58 34 34 44 34 100 101 115 99 114 105 112 116 105 111 110 34 58 34 34 44 34 99 111 117 110 116 114 121 34 58 34 85 83 34 44 34 108 111 99 97 116 105 111 110 34 58 34 85 110 105 116 101 100 32 83 116 97 116 101 115 34 44 34 116 121 112 101 34 58 34 85 78 32 111 98 115 101 114 118 97 110 99 101 34 44 34 100 97 116 101 34 58 34 48 51 47 50 50 47 50 48 50 51 34 44 34 100 97 116 101 95 121 101 97 114 34 58 34 50 48 50 51 34 44 34 100 97 116 101 95 109 111 110 116 104 34 58 34 48 51 34 44 34 100 97 116 101 95 100 97 121 34 58 34 50 50 34 44 34 119 101 101 107 95 100 97 121 34 58 34 87 101 100 110 101 115 100 97 121 34 125 93] 
+[36mINFO[0m[2023-03-22 19:54:11] Today next holiday: [World Water Day]        
+[36mINFO[0m[2023-03-22 19:54:11] https://holidays.abstractapi.com/v1/?api_key=daa5f347ca414337b040a430cca19b6d&country=US&year=2023&month=3&day=22 
+[36mINFO[0m[2023-03-22 19:54:11] [123 34 101 114 114 111 114 34 58 123 34 109 101 115 115 97 103 101 34 58 34 89 111 117 32 104 97 118 101 32 101 120 99 101 101 100 101 100 32 116 104 101 32 114 101 113 117 101 115 116 115 32 112 101 114 32 115 101 99 111 110 100 32 97 108 108 111 119 101 100 32 98 121 32 121 111 117 114 32 99 117 114 114 101 110 116 32 112 108 97 110 46 32 86 105 115 105 116 32 116 104 101 32 65 98 115 116 114 97 99 116 32 100 97 115 104 98 111 97 114 100 32 116 111 32 117 112 103 114 97 100 101 32 102 111 114 32 97 32 104 105 103 104 101 114 32 108 105 109 105 116 46 34 44 34 99 111 100 101 34 58 34 116 111 111 95 109 97 110 121 95 114 101 113 117 101 115 116 115 34 44 34 100 101 116 97 105 108 115 34 58 110 117 108 108 125 125] 
+[31mERRO[0m[2023-03-22 19:54:11] json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[36mINFO[0m[2023-03-22 20:26:05] World Water Day                              
+[31mERRO[0m[2023-03-22 20:26:05] json: cannot unmarshal object into Go value of type []holidays.APIResponse 
+[31mPANI[0m[2023-03-22 20:26:05] Bad Request: message text is empty           
+[31mPANI[0m[2023-03-22 20:42:21] Bad Request: message text is empty           
+[31mPANI[0m[2023-03-22 20:42:42] Bad Request: message text is empty           
+[31mPANI[0m[2023-03-22 20:42:54] Bad Request: message text is empty           
+[31mPANI[0m[2023-03-22 20:43:07] Bad Request: message text is empty           
+[31mPANI[0m[2023-03-22 20:49:10] Bad Request: message text is empty           
