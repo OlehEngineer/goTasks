@@ -2,7 +2,9 @@ package holidays
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -13,14 +15,23 @@ import (
 func MakeHolidayRequest(userCountry string, token string) string {
 	country := userCountry[len(userCountry)-2:] //cut the country's abreviation from user's input
 	t := time.Now()
-	year := t.Year()
-	month := int(t.Month())
-	day := t.Day()
-	link := ("https://holidays.abstractapi.com/v1/?api_key=" + token + "&country=" + country + "&year=" + strconv.Itoa(year) + "&month=" + strconv.Itoa(month) + "&day=" + strconv.Itoa(day))
-
-	resp, err := http.Get(link)
+	link, err := url.Parse("https://holidays.abstractapi.com/v1/")
 	if err != nil {
-		log.Fatalf("Holiday request error => %s\n", err)
+		log.Errorf("Cannot build the API request URL. Error - %v", err)
+		return fmt.Sprintf("Cannot build the API request URL. Error - %v", err)
+	}
+	query := link.Query()
+	query.Set("api_key", token)
+	query.Set("country", country)
+	query.Set("year", strconv.Itoa(t.Year()))
+	query.Set("month", strconv.Itoa(int(t.Month())))
+	query.Set("day", strconv.Itoa(int(t.Day())))
+	link.RawQuery = query.Encode()
+
+	resp, err := http.Get(link.String())
+	if err != nil {
+		log.Errorf("API request error => %v\n", err)
+		return fmt.Sprintf("API connection problem. Error - %v. Please try again later", err)
 	}
 
 	defer resp.Body.Close()
@@ -28,7 +39,8 @@ func MakeHolidayRequest(userCountry string, token string) string {
 	var holidays []APIResponse // slice of struct
 	err = json.NewDecoder(resp.Body).Decode(&holidays)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("Decoding problem. Error - %v", err)
+		return fmt.Sprintf("API response reading problem. Error - %v. Please try again later", err)
 	}
 
 	var HolidayList []string //slice of holidays in chosen country for today
@@ -45,7 +57,7 @@ func MakeHolidayRequest(userCountry string, token string) string {
 
 type APIResponse struct {
 	Name        string `json:"name"`
-	LocalName   string `json;"name_local"`
+	LocalName   string `json:"name_local"`
 	Language    string `json:"language"`
 	Description string `json:"description"`
 	Country     string `json:"country"`

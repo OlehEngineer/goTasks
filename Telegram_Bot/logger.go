@@ -22,7 +22,7 @@ func StartLogging() (*os.File, error) {
 		TimestampFormat: "2006-01-02 15:04:05",
 	})
 	if errLog != nil {
-		log.Fatalf("problem with log file, error => %s", errLog)
+		log.Errorf("problem with log file, error => %v", errLog)
 		return nil, errLog
 	}
 	return LogFile, nil

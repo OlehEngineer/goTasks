@@ -40,6 +40,7 @@ type Config struct {
 }
 
 func CountryFlagUnicode(Ucode string) string {
+	//create flag of country
 	flag, err := strconv.Unquote(`"` + Ucode + `"`)
 	if err != nil {
 		return ""

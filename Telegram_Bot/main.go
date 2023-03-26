@@ -15,18 +15,18 @@ func main() {
 	//real .ENV configuration file
 	envErr := godotenv.Load("local.env")
 	if envErr != nil {
-		log.Fatalf(".ENV file is missing. Error > %s < occurs.", envErr)
+		log.Errorf(".ENV file is missing. Error > %v < occurs.", envErr)
 	}
 
 	// parsing .ENV file with "github.com/caarlos0/env/v7"
 	configErr := env.Parse(&CurrentConfiguration)
 	if configErr != nil {
-		log.Fatalf(".ENV file parsing error => %s.", &configErr)
+		log.Errorf(".ENV file parsing error => %v.", &configErr)
 	}
 	//start logging
 	LogFile, logErr := StartLogging()
 	if logErr != nil {
-		log.Fatalf("problem with log file, error => %s", logErr)
+		log.Errorf("problem with log file, error => %v", logErr)
 	}
 	defer LogFile.Close()
 
@@ -66,7 +66,7 @@ func main() {
 				msg.Text = CurrentConfiguration.DefaultText // default answer to unknown command by User. Defined in the .ENV file
 			}
 			if _, err := bot.Send(msg); err != nil {
-				log.Panic(err)
+				log.Errorf("Bot send message error - %v\n", err)
 			}
 
 		} else {
@@ -80,7 +80,7 @@ func main() {
 				msg.Text = "not known country"
 			}
 			if _, err := bot.Send(msg); err != nil {
-				log.Panic(err)
+				log.Errorf("Bot send message error - %v\n", err)
 			}
 
 		}
