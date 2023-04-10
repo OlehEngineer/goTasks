@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/caarlos0/env/v7"
+	"github.com/caarlos0/env"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 )
@@ -73,26 +73,9 @@ func WeatherAPIResponseParsing(respBody io.ReadCloser, lang string) (string, err
 	sunRise := timeConverter(currentWeather.SunInfo.SunRise, currentWeather.TimeZone)
 	sunSet := timeConverter(currentWeather.SunInfo.SunSet, currentWeather.TimeZone)
 
-	var weatherResponse string //final response to user
-	if lang == "ua" || lang == "uk" {
-		weatherResponse = fmt.Sprintf("%s: %s - %v%%\n%s\n%s: %v℃, %s: %v℃\n%s: %v м\n%s: %v м/с\n%s: %0.2f ммРс\n%s: %v;\t%s: %v",
-			RespTransl.CloudsUA, weatherDesc, weather,
-			precipitation,
-			RespTransl.TempMaxUA, temperature, RespTransl.FeelsLikeUA, feelsLikeTemp,
-			RespTransl.VisibilityUA, visibility,
-			RespTransl.WindSpeedUA, windSpeed,
-			RespTransl.PressureUA, pressure,
-			RespTransl.SunRiseUA, sunRise, RespTransl.SunSetUA, sunSet)
-	} else {
-		weatherResponse = fmt.Sprintf("%s: %s - %v%%\n%s\n%s: %v℃, %s: %v℃\n%s: %v m\n%s: %v m/s\n%s: %0.2f mmHg\n%s: %v;\t%s: %v",
-			RespTransl.CloudsUS, weatherDesc, weather,
-			precipitation,
-			RespTransl.TempMaxUS, temperature, RespTransl.FeelsLikeUS, feelsLikeTemp,
-			RespTransl.VisibilityUS, visibility,
-			RespTransl.WindSpeedUS, windSpeed,
-			RespTransl.PressureUS, pressure,
-			RespTransl.SunRiseUS, sunRise, RespTransl.SunSetUS, sunSet)
-	}
+	//final response to user
+	weatherResponse := createWeatherResponse(weather, visibility, weatherDesc, precipitation, sunRise, sunSet, lang, pressure, temperature, feelsLikeTemp, windSpeed)
+
 	return weatherResponse, nil
 }
 func timeConverter(UTCtime, offset int) string {
@@ -138,4 +121,27 @@ func precipitationCheck(weater WeatherForecast, language string) string {
 			return "There is no precipitation"
 		}
 	}
+}
+func createWeatherResponse(weather, visibility int, weatherDesc, precipitation, sunRise, sunSet, lang string, pressure, temperature, feelsLikeTemp, windSpeed float32) string {
+	var weatherResponse string
+	if lang == "ua" || lang == "uk" {
+		weatherResponse = fmt.Sprintf("%s: %s - %v%%\n%s\n%s: %v℃, %s: %v℃\n%s: %v м\n%s: %v м/с\n%s: %0.2f ммРс\n%s: %v;\t%s: %v",
+			RespTransl.CloudsUA, weatherDesc, weather,
+			precipitation,
+			RespTransl.TempMaxUA, temperature, RespTransl.FeelsLikeUA, feelsLikeTemp,
+			RespTransl.VisibilityUA, visibility,
+			RespTransl.WindSpeedUA, windSpeed,
+			RespTransl.PressureUA, pressure,
+			RespTransl.SunRiseUA, sunRise, RespTransl.SunSetUA, sunSet)
+	} else {
+		weatherResponse = fmt.Sprintf("%s: %s - %v%%\n%s\n%s: %v℃, %s: %v℃\n%s: %v m\n%s: %v m/s\n%s: %0.2f mmHg\n%s: %v;\t%s: %v",
+			RespTransl.CloudsUS, weatherDesc, weather,
+			precipitation,
+			RespTransl.TempMaxUS, temperature, RespTransl.FeelsLikeUS, feelsLikeTemp,
+			RespTransl.VisibilityUS, visibility,
+			RespTransl.WindSpeedUS, windSpeed,
+			RespTransl.PressureUS, pressure,
+			RespTransl.SunRiseUS, sunRise, RespTransl.SunSetUS, sunSet)
+	}
+	return weatherResponse
 }

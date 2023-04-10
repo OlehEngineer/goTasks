@@ -23,10 +23,7 @@ func GetGeoLocation(userCity string, token string, limit int, linkBody string) (
 	link := fmt.Sprintf("%s%s&limit=%v&appid=%s", linkBody, city, limit, token)
 
 	//create pseudo returned data
-	pseudoKeyboard := tgbotapi.InlineKeyboardMarkup{
-		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{},
-	}
-	pseudoMap := make(map[string][]float32)
+	pseudoKeyboard, pseudoMap := pseudoData()
 
 	resp, err := http.Get(link)
 	if err != nil {
@@ -47,10 +44,7 @@ func GeoAPiResponseParsing(respBody io.ReadCloser) (tgbotapi.InlineKeyboardMarku
 	//parse GEO API response and create map with cities variants and geo coordinates
 
 	//create pseudo returned data
-	pseudoKeyboard := tgbotapi.InlineKeyboardMarkup{
-		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{},
-	}
-	pseudoMap := make(map[string][]float32)
+	pseudoKeyboard, pseudoMap := pseudoData()
 
 	bytes, err := ioutil.ReadAll(respBody)
 	if err != nil {
@@ -99,4 +93,12 @@ func generateInlineKeyboardMarkup(data map[string][]float32) tgbotapi.InlineKeyb
 	}
 	markup := tgbotapi.NewInlineKeyboardMarkup(rows...)
 	return markup
+}
+func pseudoData() (tgbotapi.InlineKeyboardMarkup, map[string][]float32) {
+
+	pseudoKeyboard := tgbotapi.InlineKeyboardMarkup{InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{}}
+
+	pseudoMap := make(map[string][]float32)
+
+	return pseudoKeyboard, pseudoMap
 }
