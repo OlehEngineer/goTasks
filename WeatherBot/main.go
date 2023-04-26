@@ -1,34 +1,32 @@
 package main
 
 import (
-	config "github.com/OlehEngineer/goTask/WeatherBot/config/config"
-
 	logger "github.com/OlehEngineer/goTask/WeatherBot/logger"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/OlehEngineer/goTask/WeatherBot/bot"
-
-	"github.com/caarlos0/env/v8"
-	"github.com/joho/godotenv"
-	log "github.com/sirupsen/logrus"
+	"github.com/OlehEngineer/goTask/WeatherBot/config/config"
+	DB "github.com/OlehEngineer/goTask/WeatherBot/database"
 )
-
-var BotConfig = config.BotConfiguration{} //genral bot configuration constants
 
 func main() {
 
-	//strat logging
+	//get general Bot configuration
+	BotConfig, cfgErr := config.LoadBotConfiguration()
+	if cfgErr != nil {
+		log.Fatalf("Cannot read configuration file. Error - %v", cfgErr)
+	}
+
+	//start logging
 	logger.StartLogging(BotConfig.LogLvl)
 
-	//read .ENV file for general Bot configuration
-	errEnv := godotenv.Load("set.env")
-	if errEnv != nil {
-		log.Fatalf("Cannot read .ENV file. Error - %s\n", &errEnv)
+	//connect to the MongoDB
+	clientDB, errDBconnect := DB.ConnectDataBase()
+	if errDBconnect != nil {
+		log.Fatalf("Cannot connect to the MongoDB. Error - %s", errDBconnect)
 	}
-	// set configuration variable and parse .ENV file
-	errConfg := env.Parse(&BotConfig)
-	if errConfg != nil {
-		log.Fatalf("cannot parse .ENV file. Error - %s\n", errConfg)
-	}
+	log.Info("Connected to the database")
 
-	bot.StartWeatherBot(BotConfig)
+	//start BOT itself
+	bot.StartWeatherBot(clientDB, BotConfig)
 }

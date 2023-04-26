@@ -1,5 +1,7 @@
 package config
 
+import "github.com/caarlos0/env/v8"
+
 //general Bot configuration constants
 type BotConfiguration struct {
 	BotToken               string `env:"TGBOTTOKEN"`
@@ -21,4 +23,22 @@ type BotConfiguration struct {
 	WeatherForecastErrorUS string `env:"WeatherForecastErrorUS"`
 	OldButtonClickUA       string `env:"OldButtonClickUA"`
 	OldButtonClickUS       string `env:"OldButtonClickUS"`
+	MongoDB                string `env:"MONGODB"`
+	DBname                 string `env:"DBNAME"`
+	DBcollectionName       string `env:"DBCOLLECTIONNAME"`
+	MailingTimeUA          string `env:"MAILINGTIMEUA"`
+	MailingTimeUS          string `env:"MAILINGTIMEUS"`
+	YouSubcribeUA          string `env:"YOUSUBSCRIBENUA"`
+	YouSubcribeUS          string `env:"YOUSUBSCRIBENUS"`
+	AlreadySubcribenUA     string `env:"ALREADYSUBSCRIBENUA"`
+	AlreadySubcribenUS     string `env:"ALREADYSUBSCRIBENUS"`
+}
+
+//get environment variables from .ENV file
+func LoadBotConfiguration() (*BotConfiguration, error) {
+	var cfg BotConfiguration
+	if err := env.Parse(&cfg); err != nil {
+		return nil, err
+	}
+	return &cfg, nil
 }
