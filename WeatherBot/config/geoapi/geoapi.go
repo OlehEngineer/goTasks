@@ -13,6 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// return inline keyboard markup list of available cities with name user inputted.
 func GetGeoLocation(userCity string, token string, limit int, linkBody string) (tgbotapi.InlineKeyboardMarkup, map[string][]float32, error) {
 	//userCity - name of city got from user
 	// token - token for API access
@@ -40,8 +41,9 @@ func GetGeoLocation(userCity string, token string, limit int, linkBody string) (
 	return keyboard, cities, nil
 
 }
+
+// parse GEO API response and create map with cities variants and geo coordinates
 func GeoAPiResponseParsing(respBody io.ReadCloser) (tgbotapi.InlineKeyboardMarkup, map[string][]float32, error) {
-	//parse GEO API response and create map with cities variants and geo coordinates
 
 	//create pseudo returned data
 	pseudoKeyboard, pseudoMap := pseudoData()
@@ -59,7 +61,7 @@ func GeoAPiResponseParsing(respBody io.ReadCloser) (tgbotapi.InlineKeyboardMarku
 	var cities []Geolocation
 	err = json.Unmarshal(bytes, &cities)
 	if err != nil {
-		log.Errorf("Prolem during parsed data reading. Error - %s", err)
+		log.Errorf("Problem during parsed data reading. Error - %s", err)
 		return pseudoKeyboard, pseudoMap, err
 	}
 	listOfVariants := make(map[string][]float32)
@@ -72,8 +74,9 @@ func GeoAPiResponseParsing(respBody io.ReadCloser) (tgbotapi.InlineKeyboardMarku
 
 }
 
+// return inline keyboard markup for user choose based on cities list
 func generateInlineKeyboardMarkup(data map[string][]float32) tgbotapi.InlineKeyboardMarkup {
-	//return inline keyboard markup for user choose based on cities list
+
 	var buttons []tgbotapi.InlineKeyboardButton
 	var rows [][]tgbotapi.InlineKeyboardButton
 
@@ -94,6 +97,8 @@ func generateInlineKeyboardMarkup(data map[string][]float32) tgbotapi.InlineKeyb
 	markup := tgbotapi.NewInlineKeyboardMarkup(rows...)
 	return markup
 }
+
+// generate pseudo data (empty) inline keyboard markup
 func pseudoData() (tgbotapi.InlineKeyboardMarkup, map[string][]float32) {
 
 	pseudoKeyboard := tgbotapi.InlineKeyboardMarkup{InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{}}

@@ -14,10 +14,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var RespTransl = Translation{} //struc with translation for respond to user
+var RespTransl = Translation{} //struct with translation for respond to user
 
+// send GET request to Weather API
 func GetWeather(lat float32, lon float32, weatherBodyLink string, apiToken string, lang string) (string, error) {
-	//send GET request to Weather API
+
 	apiLink := fmt.Sprintf("%s%f&lon=%f&appid=%s&units=metric&lang=%s", weatherBodyLink, lat, lon, apiToken, lang)
 
 	resp, err := http.Get(apiLink)
@@ -29,8 +30,10 @@ func GetWeather(lat float32, lon float32, weatherBodyLink string, apiToken strin
 	return WeatherAPIResponseParsing(resp.Body, lang)
 
 }
+
+// parse Weather API response and build response to user
 func WeatherAPIResponseParsing(respBody io.ReadCloser, lang string) (string, error) {
-	//parse Weather API response and build response to user
+
 	bytes, err := ioutil.ReadAll(respBody)
 	if err != nil {
 		log.Errorf("JSON answer parsing problem. Error - %s", err)
@@ -44,7 +47,7 @@ func WeatherAPIResponseParsing(respBody io.ReadCloser, lang string) (string, err
 		return "No data available", errWeather
 	}
 
-	// check if bot got corect response from weather server
+	// check if bot got correct response from weather server
 	if currentWeather.Cod != 200 {
 		return "cannot reach weather server", errors.New("Cannot reach weather server")
 	}
@@ -61,6 +64,7 @@ func WeatherAPIResponseParsing(respBody io.ReadCloser, lang string) (string, err
 		log.Errorf("Cannot read translate.go file. Error - %v", errTransConf)
 		return "Cannot send weather forecast on your language", errTransConf
 	}
+
 	//general weather data
 	weather := currentWeather.Cloudsinfo.All
 	weatherDesc := currentWeather.WeatherInfo[0].Description
@@ -78,25 +82,31 @@ func WeatherAPIResponseParsing(respBody io.ReadCloser, lang string) (string, err
 
 	return weatherResponse, nil
 }
+
+// convert parsed time value into time string for message
 func timeConverter(UTCtime, offset int) string {
 	utcTime := time.Unix(int64(UTCtime), 0).UTC()
 	localTime := utcTime.Add(time.Duration(offset) * time.Second)
 
 	return localTime.Format("15:04:05")
 }
-func pressureConverter(weater WeatherForecast) float32 {
+
+// convert pressure value from hPa to millimeters of mercury
+func pressureConverter(weather WeatherForecast) float32 {
 	k := 1.333
-	hPaPressure := weater.Forecast.Pressure
+	hPaPressure := weather.Forecast.Pressure
 	if hPaPressure > 0 {
 		return float32(hPaPressure) / float32(k)
 	} else {
 		return float32(0)
 	}
 }
-func precipitationCheck(weater WeatherForecast, language string) string {
-	//return information about percipitation
-	rainValue := weater.RainInfo.Rain1H
-	snowValue := weater.SnowInfo.Snow1H
+
+// check is there any precipitation information inside weather API response
+func precipitationCheck(weather WeatherForecast, language string) string {
+	//return information about precipitation
+	rainValue := weather.RainInfo.Rain1H
+	snowValue := weather.SnowInfo.Snow1H
 	rainUA, rainUS := "Дощ", "Rain"
 	snowUA, snowUS := "Сніг", "Snow"
 
@@ -122,6 +132,8 @@ func precipitationCheck(weater WeatherForecast, language string) string {
 		}
 	}
 }
+
+// build message to the user based on weather API response
 func createWeatherResponse(weather, visibility int, weatherDesc, precipitation, sunRise, sunSet, lang string, pressure, temperature, feelsLikeTemp, windSpeed float32) string {
 	var weatherResponse string
 	if lang == "ua" || lang == "uk" {

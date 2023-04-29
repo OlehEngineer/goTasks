@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// start logging
 func StartLogging(loglvl string) {
 
 	//LOGRUS setting
@@ -19,8 +20,10 @@ func StartLogging(loglvl string) {
 	})
 
 }
+
+// return log.SetLevel
 func NewLogger(lvl string) log.Level {
-	//return logrus.SetLevel
+
 	switch lvl {
 	case "panic":
 		return log.PanicLevel
