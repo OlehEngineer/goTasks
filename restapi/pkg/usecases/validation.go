@@ -1,4 +1,4 @@
-package model
+package usecases
 
 import (
 	"errors"
@@ -6,16 +6,13 @@ import (
 	"regexp"
 
 	"golang.org/x/crypto/bcrypt"
-
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 )
 
 // Check credentials of user. Return true, nil if authentication is OK
-func Authentication(conn *sqlx.DB, nickname, password string, userid uint16) (bool, error) {
+func (repo *DBUserRepository) Authentication(nickname, password string, userid uint16) (bool, error) {
 
 	// Check if nickname exist
-	isUserExist, err := ifUserExist(conn, nickname)
+	isUserExist, err := repo.ifUserExist(nickname)
 	if err != nil {
 		return false, fmt.Errorf("internal server error. Cannot confirm nickname exist. Error - $s", err)
 	}
@@ -24,7 +21,7 @@ func Authentication(conn *sqlx.DB, nickname, password string, userid uint16) (bo
 	}
 
 	// get User's hashed password from Database
-	hashPassword, idDB, passErr := getPassword(conn, nickname)
+	hashPassword, idDB, passErr := repo.getPassword(nickname)
 	if passErr != nil {
 		return false, fmt.Errorf("internal server error - %s", passErr)
 	}
@@ -35,7 +32,7 @@ func Authentication(conn *sqlx.DB, nickname, password string, userid uint16) (bo
 	}
 
 	// check if provided password is valid for  appropriate user ID and nickname
-	valid := ComparePassword(hashPassword, password)
+	valid := repo.ComparePassword(hashPassword, password)
 	if valid != nil {
 		return false, fmt.Errorf("incorrect password. Error - %s", valid)
 	}
@@ -43,10 +40,10 @@ func Authentication(conn *sqlx.DB, nickname, password string, userid uint16) (bo
 }
 
 // check if user already exist in the database
-func ifUserExist(conn *sqlx.DB, nickname string) (bool, error) {
+func (repo *DBUserRepository) ifUserExist(nickname string) (bool, error) {
 	var exist bool
 	query := `SELECT EXISTS(SELECT 1 FROM users WHERE nickname = $1)`
-	err := conn.QueryRow(query, nickname).Scan(&exist)
+	err := repo.DB.QueryRow(query, nickname).Scan(&exist)
 	if err != nil {
 		return false, err
 	}
@@ -54,14 +51,14 @@ func ifUserExist(conn *sqlx.DB, nickname string) (bool, error) {
 }
 
 // get hashed password from the database for next comparison
-func getPassword(conn *sqlx.DB, nickname string) (string, uint16, error) {
+func (repo *DBUserRepository) getPassword(nickname string) (string, uint16, error) {
 	var password string
 	var userid uint16
 	query1 := `select password from users where nickname = $1`
 	query2 := `select id from users where nickname =$1`
 
-	errPass := conn.QueryRow(query1, nickname).Scan(&password)
-	errID := conn.QueryRow(query2, nickname).Scan(&userid)
+	errPass := repo.DB.QueryRow(query1, nickname).Scan(&password)
+	errID := repo.DB.QueryRow(query2, nickname).Scan(&userid)
 	if errPass != nil {
 		return "", 0, errPass
 	}
@@ -72,9 +69,9 @@ func getPassword(conn *sqlx.DB, nickname string) (string, uint16, error) {
 }
 
 // hashing of provided password during sing up
-func PasswordHashing(password string) (string, error) {
+func (repo *DBUserRepository) PasswordHashing(password string) (string, error) {
 
-	isPasswordValid := PasswordValidation(password)
+	isPasswordValid := repo.PasswordValidation(password)
 	if isPasswordValid != true {
 		return "", errors.New(" the password does not meet the requirements")
 	}
@@ -86,13 +83,13 @@ func PasswordHashing(password string) (string, error) {
 }
 
 // compare hashed and provided password
-func ComparePassword(hashedPassword, password string) error {
+func (repo *DBUserRepository) ComparePassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
 // validate provided password.
 // password must include at least 1 special symbol, 1 number and must be not shorten than 10 symbols
-func PasswordValidation(password string) bool {
+func (repo *DBUserRepository) PasswordValidation(password string) bool {
 	// minimum 10 characters
 	if len(password) < 10 {
 		return false

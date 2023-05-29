@@ -1,4 +1,6 @@
-package model
+package domian
+
+import "time"
 
 // DB structure
 type Users struct {
@@ -11,7 +13,7 @@ type Users struct {
 	Status       string `json:"status" db:"status"`
 	CreatedDate  string `json:"created_at" db:"created_at"`
 	UpdatedDate  string `json:"updated_at" db:"updated_at"`
-	DeleteDate   string `json:"delete_at" db:"delete_at"`
+	DeleteDate   string `json:"deleted_at" db:"deleted_at"`
 	Likes        int    `json:"likes" db:"likes"`
 }
 
@@ -25,16 +27,16 @@ type UserSignUp struct {
 
 // REST API response structures
 type ApiResponse struct {
-	UserID       int    `json:"id" db:"id"`
-	NickName     string `json:"nickname" db:"nickname"`
-	Name         string `json:"name" db:"name"`
-	LastName     string `json:"lastname" db:"lastname"`
-	EmailAddress string `json:"email" db:"email"`
-	Status       string `json:"status" db:"status"`
-	CreatedDate  string `json:"created_at" db:"created_at"`
-	UpdatedDate  string `json:"updated_at" db:"updated_at"`
-	DeleteDate   string `json:"delete_at" db:"delete_at"`
-	Likes        int    `json:"likes" db:"likes"`
+	UserID       int        `json:"id" db:"id"`
+	NickName     string     `json:"nickname" db:"nickname"`
+	Name         string     `json:"name" db:"name"`
+	LastName     string     `json:"lastname" db:"lastname"`
+	EmailAddress string     `json:"email" db:"email"`
+	Status       string     `json:"status" db:"status"`
+	CreatedDate  time.Time  `json:"created_at" db:"created_at"`
+	UpdatedDate  time.Time  `json:"updated_at" db:"updated_at"`
+	DeleteDate   *time.Time `json:"deleted_at" db:"deleted_at"`
+	Likes        int        `json:"likes" db:"likes"`
 }
 
 // structure which API expect for user info update

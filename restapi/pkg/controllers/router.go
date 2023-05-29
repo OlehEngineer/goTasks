@@ -1,30 +1,45 @@
-package model
+package controllers
 
 import (
 	"net/http"
 	"strconv"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
-	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/OlehEngineer/goTasks/goTasks/restapi/pkg/domian"
+	"github.com/OlehEngineer/goTasks/goTasks/restapi/pkg/service"
 )
 
-type handler struct{}
+type httpHandler struct {
+	service service.Service
+	engine  *echo.Echo
+}
 
-func RegisterRouters(e *echo.Echo) {
-	h := handler{}
-	e.GET("/api/v1/users", h.getUsersPagination)
-	e.GET("/api/v1/users/:id", h.getUser)
-	e.DELETE("/api/v1/users/:id", h.deleteUser)
-	e.POST("/api/v1/users", h.postUser)
-	e.PUT("/api/v1/users/:id", h.updateUser)
+func New(service service.Service) *httpHandler {
+	h := &httpHandler{
+		service: service,
+		engine:  echo.New(),
+	}
+	return h
+}
+func (self *httpHandler) Run() {
+	self.RegisterRouters()
+	self.engine.Logger.Fatal(self.engine.Start(":8080"))
+}
+
+func (self *httpHandler) RegisterRouters() {
+	self.engine.GET("/api/v1/users", self.getUsersPagination)
+	self.engine.GET("/api/v1/users/:id", self.getUser)
+	self.engine.DELETE("/api/v1/users/:id", self.deleteUser)
+	self.engine.POST("/api/v1/users", self.postUser)
+	self.engine.PUT("/api/v1/users/:id", self.updateUser)
 
 }
 
 // get information about all users. Pagination implemented.
-func (h *handler) getUsersPagination(c echo.Context) error {
-	user := []ApiResponse{}
+func (h *httpHandler) getUsersPagination(c echo.Context) error {
+	user := []domian.ApiResponse{}
 
 	page, err := strconv.Atoi(c.QueryParam("page")) // get page number
 	if err != nil {
@@ -37,11 +52,8 @@ func (h *handler) getUsersPagination(c echo.Context) error {
 		log.Errorf("getUsersPagination. cannot get limit value. error - %s", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	log.Infof("page - %v. Limit - %v", page, limit)
-	// get connection to database
-	conn := c.Get("conn").(*sqlx.DB)
 
-	totalPageQty, err := GetPageQty(conn, limit)
+	totalPageQty, err := h.service.GetPageQty(limit)
 	if err != nil {
 		log.Errorf("getUsersPagination. cannot get page q-ty. error - %s", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -52,7 +64,7 @@ func (h *handler) getUsersPagination(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "page number out of the available page range")
 	}
 
-	user, err = GetUsersPage(conn, page, limit)
+	user, err = h.service.GetUsersPage(page, limit)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -60,9 +72,9 @@ func (h *handler) getUsersPagination(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-// get information about certain user. Basic Authentication implemented
-func (h *handler) getUser(c echo.Context) error {
-	user := ApiResponse{}
+// get user by id. Basic Authentication implemented
+func (h *httpHandler) getUser(c echo.Context) error {
+	user := domian.ApiResponse{}
 	id := c.Param("id") //get user's ID from endpoint
 
 	//convert user's ID to uint16
@@ -71,9 +83,6 @@ func (h *handler) getUser(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	// get connection to database
-	conn := c.Get("conn").(*sqlx.DB)
-
 	// get user's credentials for Basic Auth verification
 	nickname, password, ok := c.Request().BasicAuth()
 	if !ok {
@@ -81,7 +90,7 @@ func (h *handler) getUser(c echo.Context) error {
 	}
 
 	//perform Authentication
-	authorized, err := Authentication(conn, nickname, password, uint16(userID))
+	authorized, err := h.service.Authentication(nickname, password, uint16(userID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
@@ -90,7 +99,7 @@ func (h *handler) getUser(c echo.Context) error {
 	}
 
 	// return user data after successful verification
-	user, errGet := GetUser(conn, uint16(userID))
+	user, errGet := h.service.GetUser(uint16(userID))
 	if errGet != nil {
 		log.Errorf("cannot get the user from the database. Error - %v", errGet)
 
@@ -102,39 +111,8 @@ func (h *handler) getUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-// create new user. Basic Authentication implemented
-func (h *handler) postUser(c echo.Context) error {
-	newUser := &UserSignUp{}
-
-	//parsing provided JSON data
-	if err := c.Bind(newUser); err != nil {
-		log.Error(err)
-		return echo.NewHTTPError(http.StatusBadRequest, "missing required fields")
-	}
-
-	//crypt password
-	cryptedPassword, errPass := PasswordHashing(newUser.Password)
-	if errPass != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, errPass.Error())
-	}
-
-	//check if provided credentials not nil
-	if newUser.NickName == "" || newUser.Name == "" || newUser.LastName == "" {
-		return echo.NewHTTPError(http.StatusBadRequest, "not all required files available")
-	}
-	conn := c.Get("conn").(*sqlx.DB)
-
-	//create user inside the database
-	userInfo, postErr := PostUser(conn, newUser.NickName, newUser.Name, newUser.LastName, cryptedPassword)
-	if postErr != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, postErr.Error())
-	}
-
-	return c.JSON(http.StatusCreated, userInfo)
-}
-
-// delete user. Basic Authentication implemented
-func (h *handler) deleteUser(c echo.Context) error {
+// delete user by id. Basic Authentication implemented
+func (h *httpHandler) deleteUser(c echo.Context) error {
 
 	id := c.Param("id")
 	//convert user's ID to uint16
@@ -144,9 +122,6 @@ func (h *handler) deleteUser(c echo.Context) error {
 		return err
 	}
 
-	// get connection to database
-	conn := c.Get("conn").(*sqlx.DB)
-
 	// get user's credentials for Basic Auth verification
 	nickname, password, ok := c.Request().BasicAuth()
 	if !ok {
@@ -154,7 +129,7 @@ func (h *handler) deleteUser(c echo.Context) error {
 	}
 
 	//perform Authentication
-	authorized, err := Authentication(conn, nickname, password, uint16(userID))
+	authorized, err := h.service.Authentication(nickname, password, uint16(userID))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
@@ -163,7 +138,7 @@ func (h *handler) deleteUser(c echo.Context) error {
 	}
 
 	//delete user from database
-	errDel := DeleteUser(conn, uint16(userID))
+	errDel := h.service.DeleteUser(uint16(userID))
 	if errDel != nil {
 		log.Errorf("user delete problem. Error - %v", errDel)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
@@ -174,9 +149,9 @@ func (h *handler) deleteUser(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-// update user's information. Basic Authentication implemented
-func (h *handler) updateUser(c echo.Context) error {
-	updatedUser := &UpdateUser{}
+// update user by id. Basic Authentication implemented
+func (h *httpHandler) updateUser(c echo.Context) error {
+	updatedUser := &domian.UpdateUser{}
 	id := c.Param("id")
 	//convert user's ID to uint16
 	userID, err := strconv.ParseUint(id, 10, 16)
@@ -185,9 +160,6 @@ func (h *handler) updateUser(c echo.Context) error {
 		return err
 	}
 
-	// get connection to database
-	conn := c.Get("conn").(*sqlx.DB)
-
 	// get user's credentials for Basic Auth verification
 	nickname, password, ok := c.Request().BasicAuth()
 	if !ok {
@@ -195,7 +167,7 @@ func (h *handler) updateUser(c echo.Context) error {
 	}
 
 	//perform Authentication
-	authorized, err := Authentication(conn, nickname, password, uint16(userID))
+	authorized, err := h.service.Authentication(nickname, password, uint16(userID))
 	if err != nil {
 		log.Errorf("Authentication problem. Error - %s", err)
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
@@ -210,10 +182,40 @@ func (h *handler) updateUser(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "missing required fields")
 	}
 	// update user data
-	upUserResponse, err := PutUser(conn, *updatedUser)
+	upUserResponse, err := h.service.PutUser(*updatedUser)
 	if err != nil {
 		log.Errorf("user update error - %s", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, upUserResponse)
+}
+
+// create new user. Basic Authentication implemented
+func (h *httpHandler) postUser(c echo.Context) error {
+	newUser := &domian.UserSignUp{}
+
+	//parsing provided JSON data
+	if err := c.Bind(newUser); err != nil {
+		log.Error(err)
+		return echo.NewHTTPError(http.StatusBadRequest, "missing required fields")
+	}
+
+	//crypt password
+	cryptedPassword, errPass := h.service.PasswordHashing(newUser.Password)
+	if errPass != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errPass.Error())
+	}
+
+	//check if provided credentials not nil
+	if newUser.NickName == "" || newUser.Name == "" || newUser.LastName == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "not all required files available")
+	}
+
+	//create user inside the database
+	userInfo, postErr := h.service.PostUser(newUser.NickName, newUser.Name, newUser.LastName, cryptedPassword)
+	if postErr != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, postErr.Error())
+	}
+
+	return c.JSON(http.StatusCreated, userInfo)
 }
