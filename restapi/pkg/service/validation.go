@@ -1,4 +1,4 @@
-package usecases
+package service
 
 import (
 	"errors"
@@ -9,41 +9,44 @@ import (
 )
 
 // Check credentials of user. Return true, nil if authentication is OK
-func (repo *DBUserRepository) Authentication(nickname, password string, userid uint16) (bool, error) {
+func (s *service) Authentication(nickname, password string, userId uint16) (bool, error) {
 
 	// Check if nickname exist
-	isUserExist, err := repo.ifUserExist(nickname)
+	isUserExist, err := s.ifUserExist(nickname)
 	if err != nil {
-		return false, fmt.Errorf("internal server error. Cannot confirm nickname exist. Error - $s", err)
+		return false, fmt.Errorf("internal server error. Cannot confirm nickname exist. Error - %s", err.Error())
 	}
 	if isUserExist == false {
-		return false, fmt.Errorf("user does not exist. Error - %s", err)
+		return false, fmt.Errorf("user does not exist. Error - %s", err.Error())
 	}
 
 	// get User's hashed password from Database
-	hashPassword, idDB, passErr := repo.getPassword(nickname)
+	hashPassword, idDB, passErr := s.getPassword(nickname)
 	if passErr != nil {
 		return false, fmt.Errorf("internal server error - %s", passErr)
 	}
 
 	//check if provided user's id the same as in database for appropriate nickname
-	if idDB != userid {
+	if idDB != userId {
 		return false, fmt.Errorf("incorrect id provided.")
 	}
 
 	// check if provided password is valid for  appropriate user ID and nickname
-	valid := repo.ComparePassword(hashPassword, password)
+	valid := s.ComparePassword(hashPassword, password)
 	if valid != nil {
-		return false, fmt.Errorf("incorrect password. Error - %s", valid)
+		return false, fmt.Errorf("incorrect password.")
 	}
 	return true, nil
 }
 
 // check if user already exist in the database
-func (repo *DBUserRepository) ifUserExist(nickname string) (bool, error) {
-	var exist bool
+func (s *service) ifUserExist(nickname string) (bool, error) {
+
 	query := `SELECT EXISTS(SELECT 1 FROM users WHERE nickname = $1)`
-	err := repo.DB.QueryRow(query, nickname).Scan(&exist)
+
+	var exist bool
+	err := s.store.GetDB().DB.QueryRow(query, nickname).Scan(&exist)
+
 	if err != nil {
 		return false, err
 	}
@@ -51,27 +54,26 @@ func (repo *DBUserRepository) ifUserExist(nickname string) (bool, error) {
 }
 
 // get hashed password from the database for next comparison
-func (repo *DBUserRepository) getPassword(nickname string) (string, uint16, error) {
-	var password string
-	var userid uint16
-	query1 := `select password from users where nickname = $1`
-	query2 := `select id from users where nickname =$1`
+func (s *service) getPassword(nickname string) (string, uint16, error) {
 
-	errPass := repo.DB.QueryRow(query1, nickname).Scan(&password)
-	errID := repo.DB.QueryRow(query2, nickname).Scan(&userid)
-	if errPass != nil {
-		return "", 0, errPass
+	query := `SELECT password, id FROM users WHERE nickname = $1`
+
+	var password string
+	var userId uint16
+
+	err := s.store.GetDB().DB.QueryRow(query, nickname).Scan(&password, &userId)
+
+	if err != nil {
+		return "", 0, err
 	}
-	if errID != nil {
-		return "", 0, errID
-	}
-	return password, userid, nil
+
+	return password, userId, nil
 }
 
 // hashing of provided password during sing up
-func (repo *DBUserRepository) PasswordHashing(password string) (string, error) {
+func (s *service) PasswordHashing(password string) (string, error) {
 
-	isPasswordValid := repo.PasswordValidation(password)
+	isPasswordValid := s.PasswordValidation(password)
 	if isPasswordValid != true {
 		return "", errors.New(" the password does not meet the requirements")
 	}
@@ -83,13 +85,13 @@ func (repo *DBUserRepository) PasswordHashing(password string) (string, error) {
 }
 
 // compare hashed and provided password
-func (repo *DBUserRepository) ComparePassword(hashedPassword, password string) error {
+func (s *service) ComparePassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
 // validate provided password.
 // password must include at least 1 special symbol, 1 number and must be not shorten than 10 symbols
-func (repo *DBUserRepository) PasswordValidation(password string) bool {
+func (s *service) PasswordValidation(password string) bool {
 	// minimum 10 characters
 	if len(password) < 10 {
 		return false
@@ -105,5 +107,4 @@ func (repo *DBUserRepository) PasswordValidation(password string) bool {
 		return false
 	}
 	return true
-
 }

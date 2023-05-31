@@ -13,16 +13,16 @@ type Service interface {
 // interface which collect user processing methods
 type ServiceStore interface {
 	GetUsersPage(page, limit int) ([]domian.ApiResponse, error)
-	GetUser(userid uint16) (domian.ApiResponse, error)
+	GetUser(userId uint16) (domian.ApiResponse, error)
 	GetPageQty(limit int) (int, error)
-	PostUser(nickname, name, lastname, password string) (domian.ApiResponse, error)
-	DeleteUser(userid uint16) error
-	PutUser(upUser domian.UpdateUser) (domian.ApiResponse, error)
+	CreateUser(newUser domian.UserSignUp, password string) (domian.ApiResponse, error)
+	DeleteUser(userId uint16) error
+	UpdateUser(upUser domian.UpdateUser) (domian.ApiResponse, error)
 }
 
 // interface which collect verification methods
 type ServiceValidation interface {
-	Authentication(nickname, password string, userid uint16) (bool, error)
+	Authentication(nickname, password string, userId uint16) (bool, error)
 	PasswordHashing(password string) (string, error)
 }
 type service struct {
@@ -39,24 +39,18 @@ func New(store usecases.Store) *service {
 func (s *service) GetUsersPage(page, limit int) ([]domian.ApiResponse, error) {
 	return s.store.GetUsersPage(page, limit)
 }
-func (s *service) GetUser(userid uint16) (domian.ApiResponse, error) {
-	return s.store.GetUser(userid)
+func (s *service) GetUser(userId uint16) (domian.ApiResponse, error) {
+	return s.store.GetUser(userId)
 }
 func (s *service) GetPageQty(limit int) (int, error) {
 	return s.store.GetPageQty(limit)
 }
-func (s *service) PostUser(nickname, name, lastname, password string) (domian.ApiResponse, error) {
-	return s.store.PostUser(nickname, name, lastname, password)
+func (s *service) CreateUser(newUser domian.UserSignUp, password string) (domian.ApiResponse, error) {
+	return s.store.CreateUser(newUser, password)
 }
-func (s *service) DeleteUser(userid uint16) error {
-	return s.store.DeleteUser(userid)
+func (s *service) DeleteUser(userId uint16) error {
+	return s.store.DeleteUser(userId)
 }
-func (s *service) PutUser(upUser domian.UpdateUser) (domian.ApiResponse, error) {
-	return s.store.PutUser(upUser)
-}
-func (s *service) Authentication(nickname, password string, userid uint16) (bool, error) {
-	return s.store.Authentication(nickname, password, userid)
-}
-func (s *service) PasswordHashing(password string) (string, error) {
-	return s.store.PasswordHashing(password)
+func (s *service) UpdateUser(upUser domian.UpdateUser) (domian.ApiResponse, error) {
+	return s.store.UpdateUser(upUser)
 }

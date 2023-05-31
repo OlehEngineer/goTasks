@@ -13,33 +13,32 @@ import (
 
 type httpHandler struct {
 	service service.Service
-	engine  *echo.Echo
+	e       *echo.Echo
 }
 
 func New(service service.Service) *httpHandler {
 	h := &httpHandler{
 		service: service,
-		engine:  echo.New(),
+		e:       echo.New(),
 	}
 	return h
 }
-func (self *httpHandler) Run() {
-	self.RegisterRouters()
-	self.engine.Logger.Fatal(self.engine.Start(":8080"))
+func (h *httpHandler) Run() {
+	h.RegisterRouters()
+	h.e.Logger.Fatal(h.e.Start(":8080"))
 }
 
-func (self *httpHandler) RegisterRouters() {
-	self.engine.GET("/api/v1/users", self.getUsersPagination)
-	self.engine.GET("/api/v1/users/:id", self.getUser)
-	self.engine.DELETE("/api/v1/users/:id", self.deleteUser)
-	self.engine.POST("/api/v1/users", self.postUser)
-	self.engine.PUT("/api/v1/users/:id", self.updateUser)
+func (h *httpHandler) RegisterRouters() {
+	h.e.GET("/api/users", h.getUsersPagination)
+	h.e.GET("/api/users/:id", h.getUser)
+	h.e.DELETE("/api/users/:id", h.deleteUser)
+	h.e.POST("/api/users", h.createUser)
+	h.e.PUT("/api/users/:id", h.updateUser)
 
 }
 
 // get information about all users. Pagination implemented.
 func (h *httpHandler) getUsersPagination(c echo.Context) error {
-	user := []domian.ApiResponse{}
 
 	page, err := strconv.Atoi(c.QueryParam("page")) // get page number
 	if err != nil {
@@ -64,7 +63,7 @@ func (h *httpHandler) getUsersPagination(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "page number out of the available page range")
 	}
 
-	user, err = h.service.GetUsersPage(page, limit)
+	user, err := h.service.GetUsersPage(page, limit)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -74,7 +73,6 @@ func (h *httpHandler) getUsersPagination(c echo.Context) error {
 
 // get user by id. Basic Authentication implemented
 func (h *httpHandler) getUser(c echo.Context) error {
-	user := domian.ApiResponse{}
 	id := c.Param("id") //get user's ID from endpoint
 
 	//convert user's ID to uint16
@@ -151,7 +149,7 @@ func (h *httpHandler) deleteUser(c echo.Context) error {
 
 // update user by id. Basic Authentication implemented
 func (h *httpHandler) updateUser(c echo.Context) error {
-	updatedUser := &domian.UpdateUser{}
+
 	id := c.Param("id")
 	//convert user's ID to uint16
 	userID, err := strconv.ParseUint(id, 10, 16)
@@ -176,13 +174,14 @@ func (h *httpHandler) updateUser(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, "invalid credentials")
 	}
 
+	user := &domian.UpdateUser{}
 	//parsing provided JSON data
-	if err := c.Bind(updatedUser); err != nil {
+	if err := c.Bind(user); err != nil {
 		log.Error(err)
 		return echo.NewHTTPError(http.StatusBadRequest, "missing required fields")
 	}
 	// update user data
-	upUserResponse, err := h.service.PutUser(*updatedUser)
+	upUserResponse, err := h.service.UpdateUser(*user)
 	if err != nil {
 		log.Errorf("user update error - %s", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -191,28 +190,28 @@ func (h *httpHandler) updateUser(c echo.Context) error {
 }
 
 // create new user. Basic Authentication implemented
-func (h *httpHandler) postUser(c echo.Context) error {
-	newUser := &domian.UserSignUp{}
+func (h *httpHandler) createUser(c echo.Context) error {
 
+	user := &domian.UserSignUp{}
 	//parsing provided JSON data
-	if err := c.Bind(newUser); err != nil {
+	if err := c.Bind(user); err != nil {
 		log.Error(err)
 		return echo.NewHTTPError(http.StatusBadRequest, "missing required fields")
 	}
 
 	//crypt password
-	cryptedPassword, errPass := h.service.PasswordHashing(newUser.Password)
+	hashedPassword, errPass := h.service.PasswordHashing(user.Password)
 	if errPass != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errPass.Error())
 	}
 
 	//check if provided credentials not nil
-	if newUser.NickName == "" || newUser.Name == "" || newUser.LastName == "" {
+	if user.NickName == "" || user.Name == "" || user.LastName == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "not all required files available")
 	}
 
 	//create user inside the database
-	userInfo, postErr := h.service.PostUser(newUser.NickName, newUser.Name, newUser.LastName, cryptedPassword)
+	userInfo, postErr := h.service.CreateUser(*user, hashedPassword)
 	if postErr != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, postErr.Error())
 	}

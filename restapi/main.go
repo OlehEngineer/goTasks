@@ -11,7 +11,7 @@ import (
 	"github.com/OlehEngineer/goTasks/goTasks/restapi/pkg/usecases"
 )
 
-func init() {
+func main() {
 	// Load environment variables
 	if confErr := godotenv.Load(); confErr != nil {
 		log.Fatalf("Cannot read .ENV file. Error - %v", confErr)
@@ -19,8 +19,6 @@ func init() {
 	//Starting logging
 	usecases.StartLogging(os.Getenv("LOGGERLEVEL"))
 	log.Info(os.Getenv("LOGSTART"))
-}
-func main() {
 
 	//create usecase layer
 	useCaseLayer := usecases.New()
